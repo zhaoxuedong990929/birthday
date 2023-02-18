@@ -115,7 +115,7 @@ def get_ciba():
    
 def get_qinghua():
     url = 'https://api.shadiao.pro/chp'
-    res = requests.get(url)
+    res = requests.get(url).json()["data"]["text"]
     return res
  
  
