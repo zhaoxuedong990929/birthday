@@ -114,8 +114,8 @@ def get_ciba():
     return note_ch, note_en
    
 def get_qinghua():
-    url = 'https://api.shadiao.pro/chp'
-    res = requests.get(url).json()["data"]["text"]
+    url = 'url = 'https://api.mcloc.cn/love?type=json''
+    res = requests.get(url).json()["data"]
     return res
  
  
