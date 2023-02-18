@@ -112,6 +112,11 @@ def get_ciba():
     note_en = r.json()["content"]
     note_ch = r.json()["note"]
     return note_ch, note_en
+   
+def get_qinghua():
+    url = 'https://api.shadiao.pro/chp'
+    res = requests.get(url)
+    return res
  
  
 def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_dir, note_ch, note_en):
@@ -230,6 +235,7 @@ if __name__ == "__main__":
     if note_ch == "" and note_en == "":
         # 获取词霸每日金句
         note_ch, note_en = get_ciba()
+    note_ch = get_qinghua()
     # 公众号推送消息
     for user in users:
         send_message(user, accessToken, region, weather, temp, xigua, wind_dir, note_ch, note_en)
