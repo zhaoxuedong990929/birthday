@@ -235,7 +235,7 @@ if __name__ == "__main__":
     if note_ch == "" and note_en == "":
         # 获取词霸每日金句
         note_ch, note_en = get_ciba()
-    note_ch = get_qinghua().json()
+    note_ch = get_qinghua()
     # 公众号推送消息
     for user in users:
         send_message(user, accessToken, region, weather, temp, xigua, wind_dir, note_ch, note_en)
