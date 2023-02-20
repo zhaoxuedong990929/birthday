@@ -104,7 +104,7 @@ def get_yima(birthday, year, today):
     love_month = int(birthday.split("-")[1])
     love_day = int(birthday.split("-")[2])
     love_date = date(love_year, love_month, love_day)
-    love_days = str(today.__sub__(love_date)).split(" ")]
+    love_days = str(today.__sub__(love_date)).split(" ")[0]
     return str(28-int(love_days))
  
 def get_ciba():
