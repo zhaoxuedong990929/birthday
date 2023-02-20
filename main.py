@@ -32,7 +32,7 @@ def get_access_token():
     # print(access_token)
     return access_token
  
- def get_yima(birthday, year, today):
+def get_yima(birthday, year, today):
     love_year = int(birthday.split("-")[0])
     love_month = int(birthday.split("-")[1])
     love_day = int(birthday.split("-")[2])
