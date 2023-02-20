@@ -111,11 +111,6 @@ def get_ciba():
     note_en = r.json()["content"]
     note_ch = r.json()["note"]
     return note_ch, note_en
-   
-def get_qinghua():
-    url = 'https://api.mcloc.cn/love?type=json'
-    res = requests.get(url).json()["data"]
-    return res
  
  
 def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_dir, note_ch, note_en):
@@ -146,39 +141,39 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
         "data": {
             "date": {
                 "value": "{} {}".format(today, week),
-                "color": "#000000"
+                "color": get_color()
             },
             "region": {
                 "value": region_name,
-                "color": "#000000"
+                "color": get_color()
             },
             "weather": {
                 "value": weather,
-                "color": "#000000"
+                "color": get_color()
             },
             "temp": {
                 "value": temp,
-                "color": "#000000"
+                "color": get_color()
             },
             "wind_dir": {
                 "value": wind_dir,
-                "color": "#000000"
+                "color": get_color()
             },
             "love_day": {
                 "value": love_days,
-                "color": "#000000"
+                "color": get_color()
             },
             "note_en": {
                 "value": note_en,
-                "color": "#000000"
+                "color": get_color()
             },
             "note_ch": {
                 "value": note_ch,
-                "color": "#000000"
+                "color": get_color()
             },
             "xigua":{
                 "value": xigua,
-                "color": "#000000"
+                "color": get_color()
             }
         }
     }
@@ -190,7 +185,7 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
         else:
             birthday_data = "距离{}的生日还有{}天".format(value["name"], birth_day)
         # 将生日数据插入data
-        data["data"][key] = {"value": birthday_data, "color": "#000000"}
+        data["data"][key] = {"value": birthday_data, "color": get_color()}
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
@@ -234,7 +229,6 @@ if __name__ == "__main__":
     if note_ch == "" and note_en == "":
         # 获取词霸每日金句
         note_ch, note_en = get_ciba()
-    note_ch = get_qinghua()
     # 公众号推送消息
     for user in users:
         send_message(user, accessToken, region, weather, temp, xigua, wind_dir, note_ch, note_en)
