@@ -15,7 +15,6 @@ def get_color():
     return random.choice(color_list)
  
  
-
 def get_access_token():
     # appId
     app_id = config["app_id"]
@@ -32,13 +31,6 @@ def get_access_token():
     # print(access_token)
     return access_token
  
-def get_yima(birthday, year, today):
-    love_year = int(birthday.split("-")[0])
-    love_month = int(birthday.split("-")[1])
-    love_day = int(birthday.split("-")[2])
-    love_date = date(love_year, love_month, love_day)
-    love_days = str(today.__sub__(love_date)).split(" ")[0]
-    return str(28-int(love_days))
  
 def get_weather(region):
     headers = {
@@ -66,8 +58,7 @@ def get_weather(region):
     # 风向
     wind_dir = response['HeWeather6'][0]["daily_forecast"][0]["wind_dir"]
     return weather, temp, wind_dir, xigua
- 
-#--------关注微信公众号：繁星资源，更多资源等你拿----------
+
 def get_birthday(birthday, year, today):
     birthday_year = birthday.split("-")[0]
     # 判断是否为农历生日
@@ -122,7 +113,7 @@ def get_ciba():
     return note_ch, note_en
    
 def get_qinghua():
-    url = 'https://api.mcloc.cn/love?type=json'
+    url = 'url = 'https://api.mcloc.cn/love?type=json''
     res = requests.get(url).json()["data"]
     return res
  
@@ -192,23 +183,13 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
         }
     }
     for key, value in birthdays.items():
-        if i == 2:
-            # 获取距离下次生日的时间
-            birth_day = get_birthday(value["birthday"], year, today)
-            if birth_day == 0:
-                birthday_data = "今天{}生日哦，祝{}生日快乐！".format(value["name"], value["name"])
-            else:
-                birthday_data = "距离{}的生日还有{}天".format(value["name"], birth_day)
+        # 获取距离下次生日的时间
+        birth_day = get_birthday(value["birthday"], year, today)
+        if birth_day == 0:
+            birthday_data = "今天{}生日哦，祝{}生日快乐！".format(value["name"], value["name"])
         else:
-            birth_day = get_yima(value["birthday"], year, today)                    //11111111111111111111111111111111111111111111
-            if birth_day <= 0:
-                birthday_data = "佳佳子今天来姨妈了，记得给腰带和暖手宝充电哦"
-            elif birth_day <= 4:
-                birthday_data = "佳佳子最近少吃点凉的哦，还有{}天就要来姨妈了".format(birth_day)
-            else:
-                birthday_data = "距离下一次姨妈来临还有{}天".format(birth_day)
+            birthday_data = "距离{}的生日还有{}天".format(value["name"], birth_day)
         # 将生日数据插入data
-        i = i+1
         data["data"][key] = {"value": birthday_data, "color": "#000000"}
     headers = {
         'Content-Type': 'application/json',
