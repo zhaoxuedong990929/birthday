@@ -13,7 +13,14 @@ def get_color():
     get_colors = lambda n: list(map(lambda i: "#" + "%06x" % random.randint(0, 0xFFFFFF), range(n)))
     color_list = get_colors(100)
     return random.choice(color_list)
- 
+
+def get_yima(birthday, year, today):
+    love_year = int(birthday.split("-")[0])
+    love_month = int(birthday.split("-")[1])
+    love_day = int(birthday.split("-")[2])
+    love_date = date(love_year, love_month, love_day)
+    love_days = str(today.__sub__(love_date)).split(" ")[0]
+    return str(28-int(love_days))
  
 def get_access_token():
     # appId
@@ -30,6 +37,8 @@ def get_access_token():
         sys.exit(1)
     # print(access_token)
     return access_token
+
+
  
  
 def get_weather(region):
@@ -49,12 +58,10 @@ def get_weather(region):
     weather = '白天'+response['HeWeather6'][0]["daily_forecast"][0]["cond_txt_d"]+'，'+'傍晚'+response['HeWeather6'][0]["daily_forecast"][0]["cond_txt_n"]
     # 当前温度
     temp = response['HeWeather6'][0]["daily_forecast"][0]["tmp_min"]+ u"\N{DEGREE SIGN}" + "C"+'—'+response['HeWeather6'][0]["daily_forecast"][0]["tmp_max"]+ u"\N{DEGREE SIGN}" + "C"
-    if int(response['HeWeather6'][0]["daily_forecast"][0]["tmp_min"]) <= 15:
-        xigua = "今天天气有点冷，佳佳子多穿点衣服哦~"
-    elif int(response['HeWeather6'][0]["daily_forecast"][0]["tmp_min"]) <= 20:
-        xigua = "今天温度正好，可以穿漂亮衣服了呢~"
+    if int(response['HeWeather6'][0]["daily_forecast"][0]["tmp_min"]) <= 25:
+        xigua = "天气变凉啦，多穿点衣服哦~"
     else:
-        xigua = "今天真的超级热，短裤短袖走起吧！"
+        xigua = "今天又是很想你的一天~"
     # 风向
     wind_dir = response['HeWeather6'][0]["daily_forecast"][0]["wind_dir"]
     return weather, temp, wind_dir, xigua
@@ -98,14 +105,7 @@ def get_birthday(birthday, year, today):
         birth_date = year_date
         birth_day = str(birth_date.__sub__(today)).split(" ")[0]
     return birth_day
-
-def get_yima(birthday, year, today):
-    love_year = int(birthday.split("-")[0])
-    love_month = int(birthday.split("-")[1])
-    love_day = int(birthday.split("-")[2])
-    love_date = date(love_year, love_month, love_day)
-    love_days = str(today.__sub__(love_date)).split(" ")[0]
-    return str(28-int(love_days))
+ 
  
 def get_ciba():
     url = "http://open.iciba.com/dsapi/"
@@ -118,7 +118,6 @@ def get_ciba():
     note_en = r.json()["content"]
     note_ch = r.json()["note"]
     return note_ch, note_en
-   
  
  
 def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_dir, note_ch, note_en):
@@ -186,21 +185,12 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
         }
     }
     for key, value in birthdays.items():
-        if i == 2:
-            # 获取距离下次生日的时间
-            birth_day = get_birthday(value["birthday"], year, today)
-            if birth_day == 0:
-                birthday_data = "今天{}生日哦，祝{}生日快乐！".format(value["name"], value["name"])
-            else:
-                birthday_data = "距离{}的生日还有{}天".format(value["name"], birth_day)
+        # 获取距离下次生日的时间
+        birth_day = get_birthday(value["birthday"], year, today)
+        if birth_day == 0:
+            birthday_data = "今天{}生日哦，祝{}生日快乐！".format(value["name"], value["name"])
         else:
-            birth_day = get_yima(value["birthday"], year, today)                    
-            if birth_day <= 0:
-                birthday_data = "佳佳子今天来姨妈了，记得给腰带和暖手宝充电哦"
-            elif birth_day <= 4:
-                birthday_data = "佳佳子最近少吃点凉的哦，还有{}天就要来姨妈了".format(birth_day)
-            else:
-                birthday_data = "距离下一次姨妈来临还有{}天".format(birth_day)
+            birthday_data = "距离{}的生日还有{}天".format(value["name"], birth_day)
         # 将生日数据插入data
         data["data"][key] = {"value": birthday_data, "color": get_color()}
     headers = {
