@@ -14,6 +14,12 @@ def get_color():
     color_list = get_colors(100)
     return random.choice(color_list)
 
+def get_qinghua():
+    # 获取情话
+    url = 'url = 'https://api.mcloc.cn/love?type=json''
+    res = requests.get(url).json()["data"]
+    return res
+
 def get_yima(birthday, year, today):
     # 获取姨妈日期
     love_year = int(birthday.split("-")[0])
@@ -22,6 +28,12 @@ def get_yima(birthday, year, today):
     love_date = date(love_year, love_month, love_day)
     love_days = str(today.__sub__(love_date)).split(" ")[0]
     return (30-int(love_days))%30
+
+def get_qinghua():
+    # 获取情话
+    url = "https://api.mcloc.cn/love?type=json"
+    res = requests.get(url).json()["data"]
+    return res
  
 def get_access_token():
     # appId
@@ -247,6 +259,7 @@ if __name__ == "__main__":
         # 获取词霸每日金句
         note_ch, note_en = get_ciba()
     # 公众号推送消息
+    note_ch = get_qinghua()
     for user in users:
         send_message(user, accessToken, region, weather, temp, xigua, wind_dir, note_ch, note_en)
     os.system("pause")
