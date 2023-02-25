@@ -202,7 +202,7 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
                 birthday_data = "距离佳佳子下次姨妈还有{}天".format(yima_day)
         # 将生日数据插入data
         data["data"][key] = {"value": birthday_data, "color": get_color()}
-        flag++
+        flag += 1
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
