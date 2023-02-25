@@ -24,9 +24,9 @@ def get_yima(birthday, year, today):
     return (30-int(love_days))%30
 
 def get_qinghua():
-    url = 'https://api.mcloc.cn/love?type=json'
-    res = requests.get(url).json()["data"]
-    return res
+    url = 'https://api.shadiao.pro/chp'
+    res = requests.get(url).json()
+    return res["data"]["text"]
  
 def get_access_token():
     # appId
