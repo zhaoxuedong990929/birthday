@@ -156,39 +156,39 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
         "data": {
             "date": {
                 "value": "{} {}".format(today, week),
-                "color": get_color()
+                "color": "#000000"
             },
             "region": {
                 "value": region_name,
-                "color": get_color()
+                "color": "#000000"
             },
             "weather": {
                 "value": weather,
-                "color": get_color()
+                "color": "#000000"
             },
             "temp": {
                 "value": temp,
-                "color": get_color()
+                "color": "#000000"
             },
             "wind_dir": {
                 "value": wind_dir,
-                "color": get_color()
+                "color": "#000000"
             },
             "love_day": {
                 "value": love_days,
-                "color": get_color()
+                "color": "#000000"
             },
             "note_en": {
                 "value": note_en,
-                "color": get_color()
+                "color": "#000000"
             },
             "note_ch": {
                 "value": note_ch,
-                "color": get_color()
+                "color": "#000000"
             },
             "xigua":{
                 "value": xigua,
-                "color": get_color()
+                "color": "#000000"
             }
         }
     }
@@ -210,7 +210,7 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
             else:
                 birthday_data = "距离佳佳子下次姨妈还有{}天".format(yima_day)
         # 将生日数据插入data
-        data["data"][key] = {"value": birthday_data, "color": get_color()}
+        data["data"][key] = {"value": birthday_data, "color": "#000000"}
         flag += 1
     headers = {
         'Content-Type': 'application/json',
