@@ -16,7 +16,7 @@ def get_color():
 
 def get_qinghua():
     # 获取情话
-    url = 'url = 'https://api.mcloc.cn/love?type=json''
+    url = "https://api.mcloc.cn/love?type=json"
     res = requests.get(url).json()["data"]
     return res
 
