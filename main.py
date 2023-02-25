@@ -15,12 +15,13 @@ def get_color():
     return random.choice(color_list)
 
 def get_yima(birthday, year, today):
+    # 获取姨妈日期
     love_year = int(birthday.split("-")[0])
     love_month = int(birthday.split("-")[1])
     love_day = int(birthday.split("-")[2])
     love_date = date(love_year, love_month, love_day)
     love_days = str(today.__sub__(love_date)).split(" ")[0]
-    return str(28-int(love_days))
+    return (30-int(love_days))%30
  
 def get_access_token():
     # appId
@@ -184,15 +185,24 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
             }
         }
     }
+    flag = 1
     for key, value in birthdays.items():
+        if flag == 2:
         # 获取距离下次生日的时间
-        birth_day = get_birthday(value["birthday"], year, today)
-        if birth_day == 0:
-            birthday_data = "今天{}生日哦，祝{}生日快乐！".format(value["name"], value["name"])
+            birth_day = get_birthday(value["birthday"], year, today)
+            if birth_day == 0:
+                birthday_data = "今天{}生日哦，祝{}生日快乐！".format(value["name"], value["name"])
+            else:
+                birthday_data = "距离{}的生日还有{}天".format(value["name"], birth_day)
         else:
-            birthday_data = "距离{}的生日还有{}天".format(value["name"], birth_day)
+            yima_day = get_yima(birthday,year,today)
+            if yima_day >= 23 :
+                birthday_data = "姨妈大驾光临，佳佳子记得备好姨妈巾和热水哦"
+            else:
+                birthday_data = "距离佳佳子下次姨妈还有{}天".format(yima_day)
         # 将生日数据插入data
         data["data"][key] = {"value": birthday_data, "color": get_color()}
+        flag++
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
