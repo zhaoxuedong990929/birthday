@@ -24,11 +24,9 @@ def get_yima(birthday, year, today):
     return (30-int(love_days))%30
 
 def get_qinghua():
-    # 获取情话
-    url = "https://api.mcloc.cn/love?type=json"
-    res = requests.get(url)
-    re0 = res.json()["data"]
-    return re0
+    url = 'https://api.mcloc.cn/love?type=json'
+    res = requests.get(url).json()["data"]
+    return res
  
 def get_access_token():
     # appId
