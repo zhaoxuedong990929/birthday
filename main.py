@@ -13,20 +13,7 @@ def get_color():
     get_colors = lambda n: list(map(lambda i: "#" + "%06x" % random.randint(0, 0xFFFFFF), range(n)))
     color_list = get_colors(100)
     return random.choice(color_list)
-
-def get_yima(birthday, year, today):
-    # 获取姨妈日期
-    love_year = int(birthday.split("-")[0])
-    love_month = int(birthday.split("-")[1])
-    love_day = int(birthday.split("-")[2])
-    love_date = date(love_year, love_month, love_day)
-    love_days = str(today.__sub__(love_date)).split(" ")[0]
-    return (30-int(love_days))%30
-
-def get_qinghua():
-    url = 'https://api.shadiao.pro/chp'
-    res = requests.get(url).json()
-    return res["data"]["text"]
+ 
  
 def get_access_token():
     # appId
@@ -43,8 +30,6 @@ def get_access_token():
         sys.exit(1)
     # print(access_token)
     return access_token
-
-
  
  
 def get_weather(region):
@@ -64,12 +49,10 @@ def get_weather(region):
     weather = '白天'+response['HeWeather6'][0]["daily_forecast"][0]["cond_txt_d"]+'，'+'傍晚'+response['HeWeather6'][0]["daily_forecast"][0]["cond_txt_n"]
     # 当前温度
     temp = response['HeWeather6'][0]["daily_forecast"][0]["tmp_min"]+ u"\N{DEGREE SIGN}" + "C"+'—'+response['HeWeather6'][0]["daily_forecast"][0]["tmp_max"]+ u"\N{DEGREE SIGN}" + "C"
-    if int(response['HeWeather6'][0]["daily_forecast"][0]["tmp_min"]) <= 15:
-        xigua = "今天天气有点冷，佳佳子多穿点衣服哦~"
-    elif int(response['HeWeather6'][0]["daily_forecast"][0]["tmp_min"]) <= 20:
-        xigua = "今天温度正好，可以穿漂亮衣服了呢~"
+    if int(response['HeWeather6'][0]["daily_forecast"][0]["tmp_min"]) <= 25:
+        xigua = "天气变凉啦，多穿点衣服哦~"
     else:
-        xigua = "今天真的超级热，短裤短袖走起吧！"
+        xigua = "今天又是很想你的一天~"
     # 风向
     wind_dir = response['HeWeather6'][0]["daily_forecast"][0]["wind_dir"]
     return weather, temp, wind_dir, xigua
@@ -156,62 +139,51 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
         "data": {
             "date": {
                 "value": "{} {}".format(today, week),
-                "color": "#000000"
+                "color": get_color()
             },
             "region": {
                 "value": region_name,
-                "color": "#000000"
+                "color": get_color()
             },
             "weather": {
                 "value": weather,
-                "color": "#000000"
+                "color": get_color()
             },
             "temp": {
                 "value": temp,
-                "color": "#000000"
+                "color": get_color()
             },
             "wind_dir": {
                 "value": wind_dir,
-                "color": "#000000"
+                "color": get_color()
             },
             "love_day": {
                 "value": love_days,
-                "color": "#000000"
+                "color": get_color()
             },
             "note_en": {
                 "value": note_en,
-                "color": "#000000"
+                "color": get_color()
             },
             "note_ch": {
                 "value": note_ch,
-                "color": "#000000"
+                "color": get_color()
             },
             "xigua":{
                 "value": xigua,
-                "color": "#000000"
+                "color": get_color()
             }
         }
     }
-    flag = 1
     for key, value in birthdays.items():
-        if flag == 2:
         # 获取距离下次生日的时间
-            birth_day = get_birthday(value["birthday"], year, today)
-            if birth_day == 0:
-                birthday_data = "今天{}生日哦，祝{}生日快乐！".format(value["name"], value["name"])
-            else:
-                birthday_data = "距离{}的生日还有{}天".format(value["name"], birth_day)
+        birth_day = get_birthday(value["birthday"], year, today)
+        if birth_day == 0:
+            birthday_data = "今天{}生日哦，祝{}生日快乐！".format(value["name"], value["name"])
         else:
-            yima_day = get_yima(value["birthday"],year,today)
-            if yima_day >= 23 :
-                birthday_data = "姨妈大驾光临，佳佳子记得备好姨妈巾和热水哦"
-            elif birth_day <= 4:
-                birthday_data = "佳佳子最近少吃点凉的哦，还有{}天就要来姨妈了".format(yima_day)
-            else:
-                birthday_data = "距离佳佳子下次姨妈还有{}天".format(yima_day)
+            birthday_data = "距离{}的生日还有{}天".format(value["name"], birth_day)
         # 将生日数据插入data
-        data["data"][key] = {"value": birthday_data, "color": "#000000"}
-        flag += 1
+        data["data"][key] = {"value": birthday_data, "color": get_color()}
     headers = {
         'Content-Type': 'application/json',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
@@ -252,9 +224,9 @@ if __name__ == "__main__":
     weather, temp, wind_dir,xigua = get_weather(region)
     note_ch = config["note_ch"]
     note_en = config["note_en"]
-    if note_ch == "" :
+    if note_ch == "" and note_en == "":
         # 获取词霸每日金句
-        note_ch = get_qinghua()
+        note_ch, note_en = get_ciba()
     # 公众号推送消息
     for user in users:
         send_message(user, accessToken, region, weather, temp, xigua, wind_dir, note_ch, note_en)
