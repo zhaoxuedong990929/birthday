@@ -44,7 +44,26 @@ def get_access_token():
     # print(access_token)
     return access_token
 
-
+def get_weather2():
+    url = 'http://t.weather.sojson.com/api/weather/city/'
+    #通过城市的中文获取城市代码
+    city = "101010100"
+    response = requests.get(url + city)
+    d = response.json()
+    weather = d["data"]["forecast"][0]["type"]
+    temphigh = d["data"]["forecast"][0]["high"][3:]
+    templow = d["data"]["forecast"][0]["low"][3:]
+    temp = templow+ '—'+temphigh
+    temph = temphigh[:-1]
+    templ = templow[:-1]
+    wind_dir = d["data"]["forecast"][0]["fx"]
+    if int(templ) <= 15:
+        xigua = "今天天气有点冷，佳佳子多穿点衣服哦~"
+    elif int(templ) <= 20:
+        xigua = "今天温度正好，可以穿漂亮衣服了呢~"
+    else:
+        xigua = "今天真的超级热，短裤短袖走起吧！"
+    return weather, temp, wind_dir, xigua
  
  
 def get_weather(region):
@@ -249,7 +268,7 @@ if __name__ == "__main__":
     users = config["user"]
     # 传入地区获取天气信息
     region = config["region"]
-    weather, temp, wind_dir,xigua = get_weather(region)
+    weather, temp, wind_dir,xigua = get_weather2()
     note_ch = config["note_ch"]
     note_en = config["note_en"]
     if note_ch == "" :
