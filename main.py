@@ -224,7 +224,7 @@ def send_message(to_user, access_token, region_name, weather, temp, xigua, wind_
             yima_day = get_yima(value["birthday"],year,today)
             if yima_day >= 23 :
                 birthday_data = "姨妈大驾光临，佳佳子记得备好姨妈巾和热水哦"
-            elif birth_day <= 4:
+            elif yima_day <= 4:
                 birthday_data = "佳佳子最近少吃点凉的哦，还有{}天就要来姨妈了".format(yima_day)
             else:
                 birthday_data = "距离佳佳子下次姨妈还有{}天".format(yima_day)
