@@ -57,12 +57,12 @@ def get_weather2():
     temph = temphigh[:-1]
     templ = templow[:-1]
     wind_dir = d["data"]["forecast"][0]["fx"]
-    if int(templ) <= 15:
-        xigua = "今天天气有点冷，佳佳子多穿点衣服哦~"
-    elif int(templ) <= 20:
-        xigua = "今天温度正好，可以穿漂亮衣服了呢~"
+    if int(temph) <= 20:
+        xigua = "今天天气有点冷，佳佳子要添点衣服哦~"
+    elif int(temph) <= 28:
+        xigua = "今天温度正好，可以穿漂亮衣服出门了呢~"
     else:
-        xigua = "今天真的超级热，短裤短袖走起吧！"
+        xigua = "今天真的超级热，佳佳子穿上漂亮的小裙子吧！"
     return weather, temp, wind_dir, xigua
  
  
